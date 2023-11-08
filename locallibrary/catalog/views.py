@@ -23,6 +23,19 @@ def index(request):
 
 class BookListView(generic.ListView):
     model = Book
-    contect_object_name = 'book_list'
+    context_object_name = 'book_list'
 
-    queryset = Book.objects.filter(title__icontains='war')[:5]
+    queryset = Book.objects.all()
+    #a query retorna uma lista? isso é um método slicing?
+
+    template_name = 'book_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(BookListView, self).get_context_data(**kwargs)
+
+        context['some_data'] = 'This is just some data'
+
+        return context
+    
+class BookDetailView(generic.ListView):
+    model = Book
