@@ -24,6 +24,7 @@ def index(request):
 class BookListView(generic.ListView):
     model = Book
     context_object_name = 'book_list'
+    paginate_by = 3
 
     queryset = Book.objects.all()
     #a query retorna uma lista? isso é um método slicing?
@@ -37,5 +38,24 @@ class BookListView(generic.ListView):
 
         return context
     
-class BookDetailView(generic.ListView):
+class BookDetailView(generic.DetailView):
+
     model = Book
+    template_name = 'catalog/book_detail.html'
+
+class AuthorListView(generic.ListView):
+    model: Author
+    paginate_by = 2
+
+    queryset = Author.objects.all()
+    context_object_name = 'author_list'
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+    paginate_by = 4
+
+    
+
+    
+    
+
