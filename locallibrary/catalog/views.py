@@ -2,6 +2,7 @@ from catalog.models import Book, Author, BookInstance, Genre
 from django.shortcuts import render
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 
 def index(request):
@@ -70,7 +71,12 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
         return (
             BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
         )
-
     
-    
+class LoanedBooksForLIbraryans(PermissionRequiredMixin, generic.ListView):
+    permission_required = 'catalog.can_mark_returned', 'view.bookinstance'
+    model = BookInstance
 
+    def get_queryset(self):
+        return (
+            BookInstance.objects.filter(status__exact='o')
+        )
