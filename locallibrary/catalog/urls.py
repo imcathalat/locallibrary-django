@@ -9,5 +9,7 @@ urlpatterns = [
     path('authors/', views.AuthorListView.as_view(), name='authors'),
     re_path(r'^authors/(?P<pk>\d+)$', views.AuthorDetailView.as_view(), name="authors_detail"),
     path('mybooks/', views.LoanedBooksByUserListView.as_view(), name="my-borrowed"),
+    path(r'allbooks/', views.LoanedBooksForLIbraryans.as_view(), name="allbooks-borrowed"),
+    path('book/<uuid:pk>/renew/', views.renew_book_librarian, name='renew-book-librarian')
     # como exatamente essa pk vai receber um valor? ja na view?
 ]
