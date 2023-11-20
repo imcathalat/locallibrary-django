@@ -11,6 +11,10 @@ from django.urls import reverse
 
 from catalog.forms import RenewBookForm
 
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Author
+
 
 def index(request):
 
@@ -101,19 +105,44 @@ def renew_book_librarian(request, pk):
         form = RenewBookForm(request.POST)
 
         if form.is_valid():
-            book_instance.due_back = form.cleaned_data['renewall_date']
+            book_instance.due_back = form.cleaned_data['renewal_date']
             book_instance.save()
 
-            return HttpResponseRedirect(reverse('all-borrowed'))
+            return HttpResponseRedirect(reverse('allbooks-borrowed')) ##HttpResponseRedirect redireciona pra uma URL especifica e o reverse() cria uma url a partir do nome de url setado la na urls.py
+      
     
     else:
         proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
-        form = RenewBookForm(initial={'renewall_date': proposed_renewal_date})
+        form = RenewBookForm(initial={'renewal_date': proposed_renewal_date})
 
         context = {
             'form': form,
             'book_instance': book_instance
         }
 
-        return render(request, 'catalog/book_renew_librarian.html', context)
+        return render(request, 'catalog/book_renew_librarian.html', context) # Por que n usar HttpResponseRedirect?
+
+class AuthorCreate(PermissionRequiredMixin, CreateView):
+    model = Author
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    permission_required = 'catalog.add_author'
+
+class AuthorUpdate(PermissionRequiredMixin, UpdateView):
+    model = Author
+    fields = '__all__'
+    permission_required = 'catalog.change_author'
+
+class AuthorDelete(PermissionRequiredMixin, DeleteView):
+    model = Author
+    success_url = reverse_lazy('authors')
+    permission_required = 'catalog.delete_author'
+
+    def form_valid(self, form):
+        try:
+            self.object.delete()
+            return HttpResponseRedirect(self.success_url)
+        except Exception as e:
+            return HttpResponseRedirect(
+                reverse("author-delete", kwargs={"pk": self.object.pk})
+            )
     
