@@ -25,13 +25,16 @@
                         {% if user.is_authenticated %}
                         <br>
                             <li>User: {{ user.get_username }}</li>
+                            <li><a href="{% url 'my-borrowed' %}">My books</a></li>
                             <li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
                         {% else %}
                             <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
                         {% endif %}
-                        <br>
-                        <li><a href="{% url 'my-borrowed' %}">My books</a></li>
-                        <li><a href="{% url 'allbooks-borrowed' %}">All Books</a></li>
+                        <hr>
+                        <li>Staff</li>
+                        <li><a href="{% url 'allbooks-borrowed' %}">All Borrowed Books</a></li>
+                        <li><a href="{% url 'author-create' %}">Register an Author</a></li>
+                        <li><a href="{% url 'book-create' %}">Register a Book</a></li>
                     </ul>
                 {% endblock %}
             </div>

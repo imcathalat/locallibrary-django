@@ -63,7 +63,7 @@ class BookDetailView(generic.DetailView):
 
 class AuthorListView(generic.ListView):
     model: Author
-    paginate_by = 2
+    paginate_by = 5
 
     queryset = Author.objects.all()
     context_object_name = 'author_list'
@@ -145,4 +145,19 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
             return HttpResponseRedirect(
                 reverse("author-delete", kwargs={"pk": self.object.pk})
             )
+        
+class BookCreate(PermissionRequiredMixin, CreateView):
+    model = Book
+    fields = '__all__'
+    permission_required = 'catalog.add_book'
+
+class  BookUpdate(PermissionRequiredMixin, UpdateView):
+    model = Book
+    fields = '__all__'
+    permission_required = 'catalog.change_book'
+
+class BookDelete(PermissionRequiredMixin, DeleteView):
+    model = Book
+    permission_required = 'catalog.delete_book'
+    success_url = reverse_lazy('books')
     

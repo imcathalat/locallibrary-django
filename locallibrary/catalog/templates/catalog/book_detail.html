@@ -1,7 +1,30 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Book {{ book.title }}
+    {{ book.title }}
+{% endblock %}
+
+{% block sidebar %}
+    {{ block.super }}
+
+    {% if perms.catalog.change_book or perms.catalog.delete_book %}
+    <hr>
+    <ul class="sidebar-nav">
+        {% if perms.catalog.change_author%}
+            <li>
+                <a href="{% url 'book-update' book.pk %}">Update Book</a>
+            </li>
+        {% endif %}
+        {% if perms.catalog.delete_autor %}
+            <li>
+                <a href="{% url 'book-delete' book.id %}">Delete Book</a>
+            </li>
+        {% endif %}
+      
+    {% endif %}
+
+    </ul>
+
 {% endblock %}
 
 {% block content %}
