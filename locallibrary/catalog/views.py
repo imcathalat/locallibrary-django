@@ -63,7 +63,7 @@ class BookDetailView(generic.DetailView):
 
 class AuthorListView(generic.ListView):
     model: Author
-    paginate_by = 5
+    paginate_by = 10
 
     queryset = Author.objects.all()
     context_object_name = 'author_list'
@@ -113,7 +113,7 @@ def renew_book_librarian(request, pk):
     
     else:
         proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
-        form = RenewBookForm(initial={'renewal_date': proposed_renewal_date})
+        form = RenewBookForm({'renewal_date': proposed_renewal_date})
 
         context = {
             'form': form,
