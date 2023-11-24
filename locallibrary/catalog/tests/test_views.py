@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 from catalog.models import Author, BookInstance, Book, Genre, Language
 
@@ -18,7 +19,7 @@ class LoanedBooksByUserListViewTest(TestCase):
         test_user1.save()
         test_user2.save()
 
-        test_author = Author.objects.create(first_name='John', las_name='Smith')
+        test_author = Author.objects.create(first_name='John', last_name='Smith')
         test_genre = Genre.objects.create(name='Fantasy')
         test_language = Language.objects.create(name='English')
         test_book = Book.objects.create(
@@ -106,7 +107,7 @@ class LoanedBooksByUserListViewTest(TestCase):
                 last_date = book.due_back
             else:
                 self.assertTrue(last_date <= book.due_back)
-                last_date = book.due_date
+                last_date = book.due_back
             
 
 class AuthorListViewTest(TestCase):
@@ -156,7 +157,7 @@ class RenewBookInstancesViewTest(TestCase):
         test_user2.save()
 
         permission = Permission.objects.get(name='Set book as returned')
-        test_user2.user_permissions.ass(permission)
+        test_user2.user_permissions.add(permission)
         test_user2.save()
         
         test_author = Author.objects.create(first_name='John', last_name='Smith')
@@ -200,14 +201,14 @@ class RenewBookInstancesViewTest(TestCase):
     def test_forbidden_if_logged_in_but_not_correct_permission(self):
         login = self.client.login(username='testuser1', password='hiane3005')
         response = self.client.get(reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance1.pk}))
-        self.asserteEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 403)
 
     def test_logged_in_with_permission_borrowed_book(self):
         login = self.client.login(username='testuser2', password='hiane3005')
         response = self.client.get(reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance2.pk}))
         self.assertEqual(response.status_code, 200)
 
-        self.assertEqual(response.status_code, 200)
+        
 
     def test_logged_in_with_permission_another_users_borrowed_book(self):
         login = self.client.login(username='testuser2', password='hiane3005')
@@ -244,11 +245,59 @@ class RenewBookInstancesViewTest(TestCase):
         self.assertRedirects(response, reverse('allbooks-borrowed'))
 
     def test_form_invalid_renewal_date_past(self):
-        login = self.client.login(username='testuser2', password='2HJ1vRV0Z&3iD')
+        login = self.client.login(username='testuser2', password='hiane3005')
         date_in_past = datetime.date.today() - datetime.timedelta(weeks=1)
         response = self.client.post(reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance1.pk}), {'renewal_date': date_in_past})
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response.context['form'], 'renewal_date', 'Invalid date - renewal in past')
+
+    def test_form_invalid_renewal_date_future(self):
+        login = self.client.login(username='testuser2', password='hiane3005')
+        invalid_date_in_future = datetime.date.today() + datetime.timedelta(weeks=5)
+        response = self.client.post(reverse('renew-book-librarian', kwargs={'pk': self.test_bookinstance1.pk}), {'renewal_date': invalid_date_in_future})
+        self.assertEqual(response.status_code, 200)
+        self.assertFormError(response.context['form'], 'renewal_date', 'Invalid date - renewal more than 4 weeks ahead')
+
+
+class AuthorCreateViewTest(TestCase):
+    """Test case for the AuthorCreate view (Created as Challenge)."""
+
+    def setUp(self):
+        # Create a user
+        test_user = User.objects.create_user(
+            username='test_user', password='some_password')
+
+        content_typeAuthor = ContentType.objects.get_for_model(Author)
+        permAddAuthor = Permission.objects.get(
+            codename="add_author",
+            content_type=content_typeAuthor,
+        )
+
+        test_user.user_permissions.add(permAddAuthor)
+        test_user.save()
+
+    def test_if_user_has_access_to_create_author(self):
+        login = self.client.login(username='testuser2', password='hiane3005')
+        response = self.client.get(reverse('author-create'))
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_uses_correct_template_create_author(self):
+        login = self.client.login(username='testuser2', password='hiane3005')
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 2000)
+
+        self.assertTemplateUsed(response, 'catalog/author_form.html')
+
+
+    def test_forbidden_if_logged_in_but_not_correct_permission(self):
+        login = self.client.login(username='testuser1', password='hiane3005')
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 302)
+
+
+
+
 
 
 

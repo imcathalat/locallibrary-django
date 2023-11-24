@@ -105,10 +105,18 @@ def renew_book_librarian(request, pk):
         form = RenewBookForm(request.POST)
 
         if form.is_valid():
-            book_instance.due_back = form.clean_renewall_date()
+            book_instance.due_back = form.cleaned_data['renewal_date']
             book_instance.save()
 
             return HttpResponseRedirect(reverse('allbooks-borrowed')) ##HttpResponseRedirect redireciona pra uma URL especifica e o reverse() cria uma url a partir do nome de url setado la na urls.py
+        
+        else:
+            context = {
+                'form': form,
+                'book_instance': book_instance,
+            }
+
+            return render(request, 'catalog/book_renew_librarian.html', context)
       
     
     else:
