@@ -1,9 +1,12 @@
 from django.urls import path,re_path
 from django.views.generic import RedirectView
 from catalog import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.BASE, name='BASE'),
+    path('home/', views.index, name='index'),
     path('books/', views.BookListView.as_view(), name='books'),
     re_path(r'^book/(?P<pk>\d+)$', views.BookDetailView.as_view(), name='book-detail'),
     path('authors/', views.AuthorListView.as_view(), name='authors'),
@@ -18,4 +21,4 @@ urlpatterns = [
     path('book/create/', views.BookCreate.as_view(), name="book-create"),
     path('book/<int:pk>/update', views.BookUpdate.as_view(), name="book-update"),
     path('book/<int:pk>/delete', views.BookDelete.as_view(), name="book-delete"),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

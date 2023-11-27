@@ -15,6 +15,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Author
 
+def BASE(request):
+    return render(request, 'base.html')
 
 def index(request):
 
