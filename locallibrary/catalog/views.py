@@ -25,6 +25,7 @@ def index(request):
     num_instances_available = BookInstance.objects.filter(status__exact='a').count()
     num_authors = Author.objects.count()
     num_genre_romance = Book.objects.all().filter(genre = 1).count()
+    num_borrowed_books = BookInstance.objects.all().filter(status__exact='o').count()
 
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
@@ -35,8 +36,8 @@ def index(request):
         'num_instances': num_instances,
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
-        'num_genre_romance': num_genre_romance,
-        'num_visits': num_visits
+        'num_visits': num_visits,
+        'num_borrowed_books': num_borrowed_books
     }
 
     return render(request, 'index.html', context=context)
@@ -53,8 +54,6 @@ class BookListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(BookListView, self).get_context_data(**kwargs)
-
-        context['some_data'] = 'This is just some data'
 
         return context
 

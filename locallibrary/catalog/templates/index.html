@@ -5,21 +5,151 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Local Library Home</h1>
-    <p>
-        Welcome to LocalLibrary, a website developed by
-        <em>Mozilla Developer Network and me, Isadora</em>
-    </p>
-    <h2>Dynamic Content</h2>
-    <p>The library has the following record counts:</p>
-    <ul>
-        <li><strong>Books:</strong> {{ num_books }} </li>
-        <li><strong>Copies:</strong> {{ num_instances }} </li>
-        <li><strong>Copies available:</strong> {{ num_instances_available }} </li>
-        <li><strong>Authors:</strong> {{ num_authors }} </li>
-        <li><strong>Romance Books:</strong>{{ num_genre_romance }}</li>
-    </ul>
+<div class="row row-deck row-cards">
+    <div class="col-12">
+      <div class="row row-cards">
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-link card-link-pop">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <span class="bg-pinterest text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-books" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M5 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+                        <path d="M9 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+                        <path d="M5 8h4" />
+                        <path d="M9 16h4" />
+                        <path d="M13.803 4.56l2.184 -.53c.562 -.135 1.133 .19 1.282 .732l3.695 13.418a1.02 1.02 0 0 1 -.634 1.219l-.133 .041l-2.184 .53c-.562 .135 -1.133 -.19 -1.282 -.732l-3.695 -13.418a1.02 1.02 0 0 1 .634 -1.219l.133 -.041z" />
+                        <path d="M14 9l4 -1" />
+                        <path d="M16 16l3.923 -.98" />
+                      </svg>
+                  </span>
+                </div>
+                <div class="col">
+                  <div class="font-weight-medium">
+                    Books
+                  </div>
+                  <div class="text-muted">
+                    {{num_books}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-link card-link-pop">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <span class="bg-pinterest text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/shopping-cart -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eyeglass-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M8 4h-2l-3 10v2.5" />
+                        <path d="M16 4h2l3 10v2.5" />
+                        <path d="M10 16l4 0" />
+                        <path d="M17.5 16.5m-3.5 0a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0" />
+                        <path d="M6.5 16.5m-3.5 0a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0" />
+                      </svg>
+                  </span>
+                </div>
+                <div class="col">
+                  <div class="font-weight-medium">
+                    Authors
+                  </div>
+                  <div class="text-muted">
+                    {{ num_authors }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-link card-link-pop">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <span class="bg-pinterest text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-align-box-bottom-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M3 3m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+                        <path d="M11 15v2" />
+                        <path d="M14 11v6" />
+                        <path d="M17 13v4" />
+                      </svg>
+                  </span>
+                </div>
+                <div class="col">
+                  <div class="font-weight-medium">
+                    Copies
+                  </div>
+                  <div class="text-muted">
+                    {{ num_instances }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-link card-link-pop">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <span class="bg-pinterest text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye-off" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+                        <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
+                        <path d="M3 3l18 18" />
+                      </svg>
+                  </span>
+                </div>
+                <div class="col">
+                  <div class="font-weight-medium">
+                    Borrowed Books
+                  </div>
+                  <div class="text-muted">
+                    {{ num_borrowed_books }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
 
-    <p>You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.</p>
+  <div class="page-wrapper">
+        <div class="page-header d-print-none">
+            <div class="container">
+                <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <span class="status-indicator status-red status-indicator-animated">
+                    <span class="status-indicator-circle"></span>
+                    <span class="status-indicator-circle"></span>
+                    <span class="status-indicator-circle"></span>
+                    </span>
+                </div>
+                <div class="col">
+                    <h2 class="page-title">
+                    Visit this page
+                    </h2>
+                    <div class="text-muted">
+                    <ul class="list-inline list-inline-dots mb-0">
+                        <li class="list-inline-item">You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.</li>
+                    </ul>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+  </div>
+
+    {%block pagination %}
+    {% endblock %}
 
 {% endblock %}
