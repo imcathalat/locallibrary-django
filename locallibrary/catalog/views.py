@@ -1,19 +1,22 @@
 import datetime
 
-from catalog.models import Book, Author, BookInstance, Genre
+from catalog.models import Book, Author, BookInstance, Author
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
+
+from django.core.paginator import Paginator
 
 from catalog.forms import RenewBookForm
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Author
+
+
 
 def BASE(request):
     return render(request, 'base.html')
@@ -47,7 +50,7 @@ class BookListView(generic.ListView):
     context_object_name = 'book_list'
     paginate_by = 3
 
-    queryset = Book.objects.all()
+    queryset = Book.objects.all().order_by('title')
     #a query retorna uma lista? isso é um método slicing?
 
     template_name = 'book_list.html'
@@ -56,6 +59,35 @@ class BookListView(generic.ListView):
         context = super(BookListView, self).get_context_data(**kwargs)
 
         return context
+
+def listing(request, page):
+        books = Book.objects.all()
+        paginator = Paginator(books, per_page=3)
+        page_object = paginator.get_page(page)
+        context = {"page_obj": page_object}
+        return render(request, "catalog/book_list.html", context)
+
+def listing_api(request):
+    page_number = request.GET.get("page", 1)
+    per_page = request.GET.get("per_page", 3)
+    startswith = request.GET.get("startswith", "")
+    books = Book.objects.filter(
+        title__startswith=startswith
+    )
+    paginator = Paginator(books, per_page)
+    page_obj = paginator.get_page(page_number)
+    data = [{"title": book.title} for book in page_obj.object_list ]
+
+    payload = {
+        "page": {
+            "current": page_obj.number,
+            "has_next": page_obj.has_next(),
+            "has_previous": page_obj.has_previous()
+        },
+        "data": data
+    }
+
+    return JsonResponse(payload)
 
 class BookDetailView(generic.DetailView):
 

@@ -5,9 +5,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.BASE, name='BASE'),
+    path('', views.index, name='index'),
     path('home/', views.index, name='index'),
     path('books/', views.BookListView.as_view(), name='books'),
+    path('books/<int:page>', views.listing, name='books-by-page'),
+    path('books.json', views.listing_api, name='list-books-api'),
     re_path(r'^book/(?P<pk>\d+)$', views.BookDetailView.as_view(), name='book-detail'),
     path('authors/', views.AuthorListView.as_view(), name='authors'),
     re_path(r'^authors/(?P<pk>\d+)$', views.AuthorDetailView.as_view(), name="authors_detail"),

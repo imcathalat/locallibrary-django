@@ -61,3 +61,38 @@
         </div>
     {% endif %}
 {% endblock %}
+
+{% block pagination %}
+    <div class="page-body">
+        <div class="container-xl">
+            <ul class="pagination ">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1" aria-disabled="true">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
+                    </a>
+                </li>
+                {% endif %}
+        
+                {% for page_number in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_number == page_obj.number %}active
+                {% endif %}">
+                    <a href="{% url 'list-books-api' %}" class="page-link">
+                    {{page_number}}
+                </a>
+                </li>
+                {% endfor %}
+        
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    </a>
+                </li>
+                {% endif %}
+            </ul> 
+        </div>
+    </div>
+{% endblock %}     

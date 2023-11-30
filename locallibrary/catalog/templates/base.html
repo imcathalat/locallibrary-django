@@ -242,7 +242,7 @@
                 </a>
               </li>
               {% if user.is_authenticated %}
-                ''<li class="nav-item">
+                <li class="nav-item">
                   <a class="nav-link" href="{% url 'my-borrowed' %}" >
                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
@@ -419,32 +419,6 @@
                         {% endif %}
                     </span>
                 </div> {% endcomment %}
-
-                        <ul class="pagination ">
-                            {% if page_obj.has_previous %}
-                              <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1" aria-disabled="true">
-                                  <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
-                                </a>
-                              </li>
-                            {% endif %}
-
-                            {% for page in page_obj.paginator.page_range %}
-                              <li class="page-item">{{ page_obj.number }}</li>
-
-                              {% comment %} <a class="page-link" href="?page={{ page }}">{{ page_obj.number }}</a> {% endcomment %}
-                            {% endfor %}
-
-                            {% if page_obj.has_next %}
-                              <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">
-                                  <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
-                                </a>
-                              </li>
-                            {% endif %}
-                        </ul>         
             {% endblock %} 
           </div>
         </div>
