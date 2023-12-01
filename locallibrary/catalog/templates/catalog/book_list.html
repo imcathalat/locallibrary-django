@@ -78,9 +78,10 @@
                 {% for page_number in page_obj.paginator.page_range %}
                 <li class="page-item {% if page_number == page_obj.number %}active
                 {% endif %}">
-                    <a href="{% url 'list-books-api' %}" class="page-link">
-                    {{page_number}}
-                </a>
+                    <button class="page-link" onclick="ajax_function('{{page_number}}','{{title}}')">
+                        {{page_number}}
+                    </button>
+                    
                 </li>
                 {% endfor %}
         
