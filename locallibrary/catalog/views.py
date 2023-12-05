@@ -172,6 +172,7 @@ class AuthorUpdate(PermissionRequiredMixin, UpdateView):
     model = Author
     fields = '__all__'
     permission_required = 'catalog.change_author'
+    success_url = reverse_lazy('authors')
 
 class AuthorDelete(PermissionRequiredMixin, DeleteView):
     model = Author
