@@ -2,7 +2,7 @@ import datetime
 
 from catalog.models import Book, Author, BookInstance, Author
 from django.shortcuts import render, get_object_or_404
-from django.views import generic
+from django.views import generic, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
@@ -11,7 +11,7 @@ from django.urls import reverse
 
 from django.core.paginator import Paginator
 
-from catalog.forms import RenewBookForm
+from catalog.forms import *
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -129,39 +129,45 @@ class LoanedBooksForLIbraryans(PermissionRequiredMixin, generic.ListView):
             BookInstance.objects.filter(status__exact='o').order_by('due_back')
         )
 
-@login_required
-@permission_required('catalog.can_mark_returned', raise_exception=True)
-def renew_book_librarian(request, pk):
-    book_instance = get_object_or_404(BookInstance, pk=pk)
 
-    if request.method == 'POST':
-        form = RenewBookForm(request.POST)
+class RenewBookModelForm(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'catalog.can_mark_returned'
 
+    book_instance = None
+    ##print(type(book_instance))
+
+    def get(self, request, pk):
+        self.book_instance = BookInstance.objects.get(pk=pk)
+        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
+        form = RenewBookModelForm()
+
+        context = {
+            'form': form,
+            'book_instance': self.book_instance
+        }
+
+        ##return render(reverse(request, 'catalog/book_renew_librarian.html', context))
+        return render(request, 'catalog/book_renew_librarian.html', context)
+        ##return HttpResponseRedirect(reverse('catalog/book_renew_librarian.html', context))
+    
+    def post(self, pk, request):
+        self.book_instance = BookInstance.objects.get(pk=pk)
+        form = RenewBookModelForm(request.POST)
         if form.is_valid():
-            book_instance.due_back = form.cleaned_data['renewal_date']
-            book_instance.save()
+            self.book_instance.due_back = form.cleaned_data['renewal_date']
+            self.book_instance.save()
 
-            return HttpResponseRedirect(reverse('allbooks-borrowed')) ##HttpResponseRedirect redireciona pra uma URL especifica e o reverse() cria uma url a partir do nome de url setado la na urls.py
+            return HttpResponseRedirect(reverse('allbooks-borrowed')) ##HttpResponseRedirect redireciona 
+        ##pra uma URL especifica e o reverse() cria uma url a partir do nome de url setado la na urls.py
         
         else:
             context = {
                 'form': form,
-                'book_instance': book_instance,
+                'book_instance': self.book_instance,
             }
 
             return render(request, 'catalog/book_renew_librarian.html', context)
       
-    
-    else:
-        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
-        form = RenewBookForm({'renewal_date': proposed_renewal_date})
-
-        context = {
-            'form': form,
-            'book_instance': book_instance
-        }
-
-        return render(request, 'catalog/book_renew_librarian.html', context) # Por que n usar HttpResponseRedirect?
 
 class AuthorCreate(PermissionRequiredMixin, CreateView):
     model = Author
