@@ -151,7 +151,7 @@ class RenewBookView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
         return render(request, 'catalog/book_renew_librarian.html', context)
         ##return HttpResponseRedirect(reverse('catalog/book_renew_librarian.html', context))
 
-    def post(self, pk, request):
+    def post(self, request, pk):
 
         book_instance = get_object_or_404(BookInstance, pk=pk)
         form = RenewBookModelForm(request.POST)

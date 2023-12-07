@@ -1,16 +1,55 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
     <h1>Renew: {{ book_instance.book.title }}</h1>
     <p>Borrower: {{ book_instance.borrower }}</p>
     <p {% if book_instance.is_overdue %}class="text-danger"{% elif book_instance.overdue_today %}class="text-warning"{% endif %}>Due date: {{ book_instance.due_back }}</p>
 
-    <form action="" method="post">
-        {% csrf_token %}
+    
 
-        <label class="form-label">Due Back</label>
-        {{ form.due_back }}
-        <input type="submit" value="Submit"/>
-    </form>
+    <div class="col-lg-4">
+        <div class="row row-cards">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Input mask</h3>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        
+                        <label class="form-label">Due Back</label>
+                            {{ form.due_back }}
+                        <input type="submit" value="Submit"/>
+                
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                var input = $('input[name="due_back"]');
+                
+            
+                var dataOriginal = input.val();
+                
+                var partes = dataOriginal.split("-");
+                var dataFormatada = partes[2] + "/" + partes[1] + "/" + partes[0];
+                
+                
+                input.val(dataFormatada);
+                console.log(dataFormatada)
+            });
+        </script>
+
+
 
 {% endblock %}
