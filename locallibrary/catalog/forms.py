@@ -1,6 +1,7 @@
 from catalog.models import BookInstance
 from django import forms
 
+from django.core.exceptions import ValidationError
 
 from django.utils.translation import gettext_lazy as _
 import datetime
@@ -53,9 +54,8 @@ class RenewBookModelForm(forms.ModelForm):
         model = BookInstance
         fields = ['due_back']
         widgets = {
-            'due_back': forms.DateInput(attrs={'class': 'form-control'})
+            'due_back': forms.DateInput(attrs={'class': 'form-control form-control-rounded mb-2'})
         }
-        labels = {'due_back': _('Renewal date')}
         help_texts = {'due_back': _('Enter a date between now and 4 weeks (default 3).')}
         
 
