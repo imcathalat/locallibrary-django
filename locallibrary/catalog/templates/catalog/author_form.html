@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% block buttons %}
+{% endblock %}
 <script>
   document.getElementById('id_first_name');
 </script>
@@ -16,21 +19,14 @@
         <form action="" method="post">
           {% csrf_token %}
 
-
-          <label class="form-label">{{ form.first_name }}</label>
-          {{ form.first_name|add_class: "form-control form-control-rounded mb-2"}}
-          <input type="submit" value="Submit" />
+          <p>{{ form.as_p }}</p>
+          <div class="row align-items-center">
+            <div class="col"></div>
+            <div class="col-auto">
+              <input type="submit" value="Salvar" class="btn btn-primary">
+            </div>
+          </div>
         </form>
-      </div>
-    </div>
-    <div class="card-footer">
-      <div class="row align-items-center">
-        <div class="col"></div>
-        <div class="col-auto">
-          <a href="#" class="btn btn-primary">
-            Save
-          </a>
-        </div>
       </div>
     </div>
   </div>

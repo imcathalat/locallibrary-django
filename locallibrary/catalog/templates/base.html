@@ -371,6 +371,8 @@
               <!-- Page title actions -->
               {% if user.is_authenticated %}
                {% if request.user.is_staff %}
+
+                {% block buttons %}
                   <div class="col-auto ms-auto d-print-none">
                     <div class="btn-list">
                       <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
@@ -389,6 +391,7 @@
                       </a>
                     </div>
                   </div>
+                  {% endblock %}
                 {% endif %}
               {% endif %}
             </div>

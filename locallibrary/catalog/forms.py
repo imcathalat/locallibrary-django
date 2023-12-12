@@ -1,4 +1,4 @@
-from catalog.models import BookInstance
+from catalog.models import BookInstance, Author
 from django import forms
 
 from django.core.exceptions import ValidationError
@@ -59,5 +59,55 @@ class RenewBookModelForm(forms.ModelForm):
             'due_back': forms.DateInput(attrs={'class': 'form-control form-control-rounded mb-2'})
         }
         help_texts = {'due_back': _('Enter a date between now and 4 weeks (default 3).')}
+
+class CreateAuthorForm(forms.ModelForm):
+    first_name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Primeiro Nome', 'class': 'form-control form-control-rounded mb-2'}
+    ))
+
+    last_name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Segundo Nome', 'class': 'form-control form-control-rounded mb-2'}
+    ))
+
+    date_of_birth = forms.DateField(
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-rounded mb-2'}
+    ))
+
+    date_of_death = forms.DateField(
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-rounded mb-2'}
+    ))
+
+    class Meta:
+        model = Author
+        fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
         
+
+class CreateBookForm(forms.ModelForm):
+    title = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Titulo', 'class': 'form-control form-control-rounded mb-2'}
+    ))
+
+    summary = forms.CharField(
+        widget=forms.Textarea(
+            attrs={'placeholder': 'Description of the book', 'class': 'form-control form-control-rounded mb-2', 'rows': '2'}
+    ))
+
+    isbn = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'placeholder': '13 character ISBN', 'class': 'form-control form-control-rounded mb-2'}
+    ))
+
+    date_of_death = forms.DateField(
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-rounded mb-2'}
+    ))
+
+    class Meta:
+        model = Author
+        fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
 
