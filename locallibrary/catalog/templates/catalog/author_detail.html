@@ -6,15 +6,37 @@
 
 {% block buttons %}
 
-<div class="col-auto ms-auto d-print-none">
-    <div class="btn-list">
-      <a href="{% url 'author-delete' author.id %}" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
-        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-        Delete Author
-      </a>
-    </div>
-</div>
+    {% if perms.catalog.change_author or perms.catalog.delete_author %}
+        {% if perms.catalog.change_author %}
+
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                <a href="{% url 'author-update' author.id %}" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                    Update Author
+                </a>
+                </div>
+            </div>
+
+        {% endif %}
+
+        {% if perms.catalog.chenge_author %}
+
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                <a href="{% url 'author-delete' author.id %}" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                    Delete Author
+                </a>
+                </div>
+            </div>
+
+        {% endif %}
+    {% endif %}
+
+
 
 {% endblock %}
 
