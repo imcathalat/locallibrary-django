@@ -201,8 +201,9 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
         
 class BookCreate(PermissionRequiredMixin, CreateView):
     model = Book
-    fields = '__all__'
     permission_required = 'catalog.add_book'
+    template_name = 'catalog/book_form.html'
+    form_class = CreateBookForm
 
 class  BookUpdate(PermissionRequiredMixin, UpdateView):
     model = Book

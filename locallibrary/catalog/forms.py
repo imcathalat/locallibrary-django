@@ -1,4 +1,4 @@
-from catalog.models import BookInstance, Author
+from catalog.models import BookInstance, Author, Book, Genre, Language
 from django import forms
 
 from django.core.exceptions import ValidationError
@@ -102,12 +102,28 @@ class CreateBookForm(forms.ModelForm):
             attrs={'placeholder': '13 character ISBN', 'class': 'form-control form-control-rounded mb-2'}
     ))
 
-    date_of_death = forms.DateField(
-        widget=forms.DateInput(
-            attrs={'class': 'form-control form-control-rounded mb-2'}
-    ))
+    author = forms.ModelChoiceField(
+        queryset= Author.objects.all(),
+        to_field_name='first_name',
+        required=True,  
+        widget=forms.Select(attrs={'class': 'form-control form-control-rounded mb-2'})
+    )
+
+    genre = forms.ModelChoiceField(
+        queryset= Genre.objects.all(),
+        to_field_name='name',
+        required=True,  
+        widget=forms.Select(attrs={'class': 'form-control form-control-rounded mb-2'})
+    )
+
+    language = forms.ModelChoiceField(
+        queryset= Language.objects.all(),
+        to_field_name='name',
+        required=True,  
+        widget=forms.Select(attrs={'class': 'form-control form-control-rounded mb-2'})
+    )
 
     class Meta:
-        model = Author
-        fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+        model = Book
+        fields = ['title', 'summary', 'isbn', 'author', ]
 
