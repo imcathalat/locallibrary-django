@@ -2,19 +2,63 @@
 
 {% block content %}
     <h1>Borrowed books</h1>
-
     {% if bookinstance_list %}
-        <ul>
+            <div class="page-body">
+                <div class="container-xl">
+                    <div class="row row-cards">
+                        <div class="row row-cards row-deck">
+                            {% for bookinst in bookinstance_list %}
 
-            {% for bookinst in bookinstance_list %}
-            <li class="{% if bookinst.is_overdue %}text-dange{% elif bookinst.overdue_today %}text-warning{% endif %}">
-                <a href="[% url 'book-detail' bookinst.book.pk %]">{{ bookinst.book.title }}</a>
-                ({{ bookinst.due_back }})
-            </li>
-            {% endfor %}
-        </ul>
+                            
+                                
+                                <div class="col-md-4">
+                                    <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title"><a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title }}</a></h3>
+                                    </div>
+                                    <div class="card-footer">
+                                        <p class="{% if bookinst.is_overdue %}text-dange{% elif bookinst.overdue_today %}text-warning{% endif %}">
+                                            ({{ bookinst.due_back }})
+                                        </p>
+                                        
+                                    </div>
+                                    </div>
+                                </div>
 
-        {% else %}
-            <p>There are no books borrowed.</p>
+                            {% comment %} <div class="col-md-6 col-lg-3">
+                                <div class="card">
+                                <div class="img-responsive img-responsive-21x9 card-img-top" style="background-image: url(./static/photos/home-office-desk-with-macbook-iphone-calendar-watch-and-organizer.jpg)"></div>
+                                <div class="card-body">
+                                    <h3 class="card-title"><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h3>
+                                    <p class="text-muted">({{book.author}})</p>
+                                </div> {% endcomment %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% else %}
+        <div class="col-lg-4">
+            <div class="card">
+            <div class="empty">
+                <div class="empty-img"><img src="" height="128" alt="">
+                </div>
+                <p class="empty-title">No results found</p>
+                <p class="empty-subtitle text-muted">
+                    There are no books borrowed..
+                </p>
+                <div class="empty-action">
+                    <div class="btn-list">
+                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                        Renew a Book.
+                        </a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
     {% endif %}
+
 {% endblock %}

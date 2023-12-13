@@ -160,7 +160,7 @@ class RenewBookView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
             book_instance.due_back = form.cleaned_data['due_back']
             book_instance.save()
 
-            return HttpResponseRedirect(reverse('allbooks-borrowed')) ##HttpResponseRedirect redireciona 
+            return render(request, 'catalog/book_renew_librarian.html', context) ##HttpResponseRedirect redireciona 
         ##pra uma URL especifica e o reverse() cria uma url a partir do nome de url setado la na urls.py
         
         else:
@@ -177,6 +177,7 @@ class AuthorCreateView(PermissionRequiredMixin, CreateView):
     permission_required = 'catalog.create_author'
     template_name = 'catalog/author_form.html'
     form_class = CreateAuthorForm
+
     
 
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):
@@ -204,6 +205,34 @@ class BookCreate(PermissionRequiredMixin, CreateView):
     permission_required = 'catalog.add_book'
     template_name = 'catalog/book_form.html'
     form_class = CreateBookForm
+
+    def post(self, request):
+
+        form = CreateBookForm(request.POST)
+
+        if form.is_valid(): 
+            title = form.cleaned_data['title']
+            language = form.cleaned_data['language']
+            print(language)
+            id_language = Language.objects.get(name=language)
+
+            language = id_language
+            
+
+            language.save()
+
+            context = {
+                'form': form
+            }
+
+            return render(request, 'catalog/book_detail.html', context)
+        
+        else:
+            context = {
+                'form': form
+            }
+
+            return render(request, 'catalog/book_renew_librarian.html', context)
 
 class  BookUpdate(PermissionRequiredMixin, UpdateView):
     model = Book
